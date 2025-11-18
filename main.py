@@ -4,12 +4,12 @@ import time
 from selenium.webdriver.common.by import By
 driver = webdriver.Chrome()  
 driver.get("https://tienda.mercadona.es/#content")
-time.sleep(5) 
+time.sleep(2) 
 
-with open('list.txt', 'r') as file:
+with open('list.txt', 'r', encoding='utf-8') as file:
     products = file.readlines()
 
-print(products)
+count = products.__len__()
 
 cookies_btn = driver.find_element(By.XPATH, '//button[contains(@class, "ui-button--positive") and text()="Aceptar"]')
 cookies_btn.click()
@@ -28,7 +28,9 @@ for product in products[0].split(','):
     input_search = driver.find_element(By.ID, 'search')
     input_search.clear()
     input_search.send_keys(product)
-    time.sleep(2)  
+    time.sleep(2)
+    print(f"Quedan {count} productos por buscar.")
+    count -= 1  
     try:
         counts = getattr(driver, "_product_counts", {})
         count = counts.get(product, 0)
